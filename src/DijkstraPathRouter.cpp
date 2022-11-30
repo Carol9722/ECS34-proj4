@@ -1,7 +1,7 @@
 #include "DijkstraPathRouter.h"
 #include <memory>
 
-struct CDijkstraPathRouter:: SImplementation{
+struct CDijkstraPathRouter::SImplementation{
 
     SImplementation(){
 
@@ -9,11 +9,11 @@ struct CDijkstraPathRouter:: SImplementation{
 
     std::size_t VertexCount() const{
 
-    }
+    };
 
     TVertexID AddVertex(std::any tag){
 
-    }
+    };
     
     std::any GetVertexTag(TVertexID id) const{
 
