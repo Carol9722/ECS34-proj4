@@ -1,8 +1,10 @@
 #include "BusSystemIndexer.h"
 #include "BusSystem.h"
+#include <bits/stdc++.h>
 #include <memory>
 #include <string>
 #include <iostream>
+#include <vector>
 
 struct CBusSystemIndexer::SImplementation{
     std::shared_ptr<CBusSystem> BusSystem;
@@ -20,22 +22,73 @@ struct CBusSystemIndexer::SImplementation{
     };
 
     std::shared_ptr<SStop> SortedStopByIndex(std::size_t index) const {
-        return nullptr;
+        if(index >= BusSystem->StopCount()) return nullptr;
+        std::vector <int> StopID;
+        for (int i = 0; i < BusSystem->StopCount(); i++)
+        {
+            StopID.push_back(BusSystem->StopByIndex(i)->ID());
+        }
+        sort(StopID.begin(),StopID.end());
+        return BusSystem->StopByID(StopID[index]);
     };
 
     std::shared_ptr<SRoute> SortedRouteByIndex(std::size_t index) const {
-        return BusSystem->RouteByIndex(index);
+        if(index >= BusSystem->RouteCount()) return nullptr;
+        std::vector <std::string> RouteID;
+        for (int i = 0; i < BusSystem->RouteCount(); i++)
+        {
+            RouteID.push_back(BusSystem->RouteByIndex(i)->Name());
+        }
+        sort(RouteID.begin(),RouteID.end());
+        return BusSystem->RouteByName(RouteID[index]);
     };
 
     std::shared_ptr<SStop> StopByNodeID(TNodeID id) const {
-        return BusSystem->StopByID(id);
+        for (int i = 0; i < BusSystem->StopCount(); i++)
+        {
+            if(BusSystem->StopByIndex(i)->NodeID() == id)
+            {
+                return BusSystem->StopByIndex(i);
+            }
+        }
+        return nullptr;
     };
 
     bool RoutesByNodeIDs(TNodeID src, TNodeID dest, std::unordered_set<std::shared_ptr<SRoute> > &routes) const {
-        return 0;
+        CBusSystem::TStopID s = StopByNodeID(src)->ID();
+        CBusSystem::TStopID d = StopByNodeID(dest)->ID();
+        int count = 0;
+        for (int i = 0; i < BusSystem->RouteCount(); i++)
+        {
+            count = 0;
+            for(int j =  0; j<BusSystem->RouteByIndex(i)->StopCount(); j++)
+            {
+                if(BusSystem->RouteByIndex(i)->GetStopID(j) == s) count ++;
+                if(BusSystem->RouteByIndex(i)->GetStopID(j) == d) count ++;
+            }
+            if(count >= 2)
+            {
+                routes.insert(BusSystem->RouteByIndex(i));
+            }
+        }
+
+        if(routes.empty())
+        {
+            return 0;
+        }
+        return 1;
+        
+        
     };
+
     bool RouteBetweenNodeIDs(TNodeID src, TNodeID dest) const {
-        return 0;
+        std::unordered_set< std::shared_ptr<CBusSystem::SRoute> > Routes;
+        RoutesByNodeIDs(src, dest, Routes);
+        if (Routes.empty())
+        {
+            return 0;
+        }
+        return 1;
     };
 };
 
