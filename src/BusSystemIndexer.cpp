@@ -20,7 +20,7 @@ struct CBusSystemIndexer::SImplementation{
     };
 
     std::shared_ptr<SStop> SortedStopByIndex(std::size_t index) const {
-        
+        return nullptr;
     };
 
     std::shared_ptr<SRoute> SortedRouteByIndex(std::size_t index) const {

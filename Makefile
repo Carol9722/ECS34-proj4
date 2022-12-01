@@ -74,7 +74,7 @@ $(BIN_DIR)/testosm: $(OBJ_DIR)/OSMTest.o $(OBJ_DIR)/OpenStreetMap.o $(OBJ_DIR)/X
 	$(CXX) -o $(BIN_DIR)/testosm $(OBJ_DIR)/OSMTest.o $(OBJ_DIR)/OpenStreetMap.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringUtils.o $(LDFLAGS)
 
 $(BIN_DIR)/testkml: $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o
-	$(CXX) -o $$(BIN_DIR)/testkml $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o $(LDFLAGS)
+	$(CXX) -o $(BIN_DIR)/testkml $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o $(LDFLAGS)
 
 $(BIN_DIR)/testfiledatass: $(OBJ_DIR)/FileDataSSTest.o $(OBJ_DIR)/FileDataSource.o $(OBJ_DIR)/FileDataSink.o $(OBJ_DIR)/FileDataFactory.o
 	$(CXX) -o $(BIN_DIR)/testfiledatass $(OBJ_DIR)/FileDataSSTest.o $(OBJ_DIR)/FileDataSource.o $(OBJ_DIR)/FileDataSink.o $(OBJ_DIR)/FileDataFactory.o $(LDFLAGS)
@@ -82,8 +82,8 @@ $(BIN_DIR)/testfiledatass: $(OBJ_DIR)/FileDataSSTest.o $(OBJ_DIR)/FileDataSource
 $(BIN_DIR)/testdpr: $(OBJ_DIR)/DijkstraPathRouterTest.o $(OBJ_DIR)/DijkstraPathRouter.o
 	$(CXX) -o $(BIN_DIR)/testdpr $(OBJ_DIR)/DijkstraPathRouterTest.o $(OBJ_DIR)/DijkstraPathRouter.o $(LDFLAGS)
 
-$(BIN_DIR)/testcsvbsi: $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o
-	$(CXX) -o $(BIN_DIR)/testcsvbsi $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o $(LDFLAGS)
+$(BIN_DIR)/testcsvbsi: $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/CSVBS.o
+	$(CXX) -o $(BIN_DIR)/testcsvbsi $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/CSVBS.o $(LDFLAGS)
 
 $(BIN_DIR)/testtpcl: $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o
 	$(CXX) -o $(BIN_DIR)/testtpcl $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o $(LDFLAGS)
