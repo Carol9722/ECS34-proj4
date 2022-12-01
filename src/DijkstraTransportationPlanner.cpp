@@ -6,11 +6,11 @@ struct CDijkstraTransportationPlanner::SImplementation{
 
     }
     
-    std::size_t NodeCount() const{
+    std::size_t NodeCount() const noexcept {
 
     };
     
-    std::shared_ptr<CStreetMap::SNode> SortedNodeByIndex(std::size_t index) const{
+    std::shared_ptr<CStreetMap::SNode> SortedNodeByIndex(std::size_t index) const noexcept {
 
     };
 
@@ -28,7 +28,7 @@ struct CDijkstraTransportationPlanner::SImplementation{
 };
 
 CDijkstraTransportationPlanner::CDijkstraTransportationPlanner(std::shared_ptr<SConfiguration> config){
-    DImplementation = std::make_unique<SImplementation>(std::shared_ptr<SConfiguration> config);
+    DImplementation = std::make_unique<SImplementation>(config);
 };
 
 CDijkstraTransportationPlanner::~CDijkstraTransportationPlanner(){

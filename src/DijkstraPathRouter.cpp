@@ -32,7 +32,7 @@ struct CDijkstraPathRouter::SImplementation{
         return 0;
     };
 
-}
+};
 
 CDijkstraPathRouter::CDijkstraPathRouter(){
     DImplementation = std::make_unique<SImplementation>();
@@ -43,26 +43,26 @@ CDijkstraPathRouter::~CDijkstraPathRouter(){
     
 };
 
-std::size_t CDijkstraPathRouter::VertexCount(){
+std::size_t CDijkstraPathRouter::VertexCount() const noexcept{
     return DImplementation->VertexCount();
 };
 
-TVertexID CDijkstraPathRouter::AddVertex(std::any tag){
-    return DImplementation->AddVertex(std::any tag);
+CPathRouter::TVertexID CDijkstraPathRouter::AddVertex(std::any tag) noexcept{
+    return DImplementation->AddVertex(tag);
 };
 
-std::any CDijkstraPathRouter::GetVertexTag(TVertexID id){
-    return DImplementation->GetVertexTag(TVertexID id);
+std::any CDijkstraPathRouter::GetVertexTag(TVertexID id) const noexcept{
+    return DImplementation->GetVertexTag(id);
 };
 
-bool CDijkstraPathRouter::AddEdge(TVertexID src, TVertexID dest, double weight, bool bidir = false){
-    return DImplementation->AddEdge(TVertexID src, TVertexID dest, double weight, bool bidir = false);
+bool CDijkstraPathRouter::AddEdge(TVertexID src, TVertexID dest, double weight, bool bidir) noexcept{
+    return DImplementation->AddEdge(src, dest, weight, bidir);
 };
 
-bool CDijkstraPathRouter::Precompute(std::chrono::steady_clock::time_point deadline) {
-    return DImplementation->Precompute(std::chrono::steady_clock::time_point deadline);
+bool CDijkstraPathRouter::Precompute(std::chrono::steady_clock::time_point deadline) noexcept{
+    return DImplementation->Precompute(deadline);
 };
 
-double CDijkstraPathRouter::FindShortestPath(TVertexID src, TVertexID dest, std::vector<TVertexID> &path) {
-    return DImplementation->FindShortestPath(TVertexID src, TVertexID dest, std::vector<TVertexID> &path);
+double CDijkstraPathRouter::FindShortestPath(TVertexID src, TVertexID dest, std::vector<TVertexID> &path) noexcept{
+    return DImplementation->FindShortestPath(src, dest, path);
 };

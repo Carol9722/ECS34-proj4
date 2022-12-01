@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "DijkstraPathRouter.h"
 #include<iostream>
+#include<string>
 
 TEST(DijkstraPathRouter, RouteEmptyTest){
     CDijkstraPathRouter DijkstraPathRouter;
@@ -20,40 +21,26 @@ TEST(DijkstraPathRouter, FindVertexTest){
     int id1 = DijkstraPathRouter.AddVertex('A');
     int id2 = DijkstraPathRouter.AddVertex('B');
     ASSERT_EQ(DijkstraPathRouter.VertexCount(), 2);
-    EXPECT_EQ(DijkstraPathRouter.GetVertexTag(id1), 'A');
-    EXPECT_EQ(DijkstraPathRouter.GetVertexTag(id2), 'B');
+    EXPECT_EQ(std::any_cast<char>(DijkstraPathRouter.GetVertexTag(id1)), 'A');
+    EXPECT_EQ(std::any_cast<char>(DijkstraPathRouter.GetVertexTag(id2)), 'B');
 }
 
-TEST(DijkstraPathRouter, AddEdgeTest){
+TEST(DijkstraPathRouter, SimpleTest){
     CDijkstraPathRouter DijkstraPathRouter;
-    int id1 = DijkstraPathRouter.AddVertex('A');
-    int id2 = DijkstraPathRouter.AddVertex('B');
-    int id3 = DijkstraPathRouter.AddVertex('C');
-    int id4 = DijkstraPathRouter.AddVertex('D');
-    DijkstraPathRouter.AddEdge(id1,id2,3);
-    DijkstraPathRouter.AddEdge(id2,id3,5);
-    ASSERT_EQ(DijkstraPathRouter.VertexCount(),4);
-    EXPECT_EQ(DijkstraPathRouter.GetVertexTag(id2), 'B');
+    std::vector< CPathRouter::TVertexID > Vertices;
+    for(std::size_t Index = 0; Index < 6; Index++){
+        Vertices.push_back(DijkstraPathRouter.AddVertex(Index));
+        EXPECT_EQ(Index, std::any_cast<std::size_t>(DijkstraPathRouter.GetVertexTag(Vertices.back())));
+    }
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[4],2);
+    DijkstraPathRouter.AddEdge(Vertices[1],Vertices[3],10);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[0],0);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[1],3);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[2],7);
+    DijkstraPathRouter.AddEdge(Vertices[4],Vertices[5],100);
+    DijkstraPathRouter.AddEdge(Vertices[5],Vertices[3],5);
+    std::vector< CPathRouter::TVertexID > Path;
+    std::vector< CPathRouter::TVertexID > ExpectedPath = {Vertices[2],Vertices[1],Vertices[3]};
+    EXPECT_EQ(13.0,DijkstraPathRouter.FindShortestPath(Vertices[2],Vertices[3],Path));
+    EXPECT_EQ(Path,ExpectedPath);
 }
-
-TEST(DijkstraPathRouter, ShortestDistanceTest){
-    CDijkstraPathRouter DijkstraPathRouter;
-    int id1 = DijkstraPathRouter.AddVertex('A');
-    int id2 = DijkstraPathRouter.AddVertex('B');
-    int id3 = DijkstraPathRouter.AddVertex('C');
-    int id4 = DijkstraPathRouter.AddVertex('D');
-    DijkstraPathRouter.AddEdge(id1,id2,3);
-    DijkstraPathRouter.AddEdge(id2,id3,5);
-    DijkstraPathRouter.AddEdge(id3,id4,10);
-    DijkstraPathRouter.AddEdge(id1,id3,3);
-    std::vector<CPathRouter::TVertexID> pathid;
-    ASSERT_EQ(DijkstraPathRouter.VertexCount(),4);
-    EXPECT_EQ(DijkstraPathRouter.FindShortestPath(id1, id4, pathid), 13);
-    EXPECT_EQ(pathid[0], id1);
-    EXPECT_EQ(pathid[1], id3);
-    EXPECT_EQ(pathid[2], id4);
-}
-
-
-
-
