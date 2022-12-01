@@ -11,6 +11,7 @@ struct CXMLReader::SImplementation{
     std::deque<SXMLEntity> DEntities;
 
     void StartElement(const XML_Char *name, const XML_Char **atts){
+        //std::cout<<"HI ITS ME"<<std::endl;
         SXMLEntity NewEntity;
         size_t Index = 0;
         NewEntity.DNameData = name;
@@ -28,11 +29,12 @@ struct CXMLReader::SImplementation{
 
         NewEntity.DType = SXMLEntity::EType::EndElement;
         DEntities.push_back(NewEntity);
-        //std::cout<<NewEntity<<std::endl;
+        //std::cout<<"YESSSSSSSSSSSSSSSSSS"<<std::endl;
     };
 
     void CharacterData(const XML_Char *s, int len){
         SXMLEntity NewEntity;
+        //std::cout<<"THE LEN OF CHAR DATA:"<<len<<std::endl;
         //NewEntity.DNameData = std::string (s,len);
         std::string str;
         for(int i= 0;i<len;i++){
@@ -103,22 +105,16 @@ struct CXMLReader::SImplementation{
     };
 
     bool ReadEntity(SXMLEntity &entity, bool skipcdata){
+    	//std::cout<<"YAYYY READING ENTITY NOW"<<std::endl;
         bool Done = false;
-        std::shared_ptr< CDataSource > CopySource;
-        CopySource = DSource;
-        //std::cout<<"COPYSOURDE:"<<CopySource<<std::endl;
-        //std::cout<<"DSOURDE:"<<*DSource<<std::endl;
-
-
         while(!Done){
             //std::cout<<"MADE IT OUT OF FIRST LOOP"<<std::endl;
             std::vector<char> Buffer;
-            //std::cout<<"BUFFER IS: "<<Buffer[i]<<std::endl;
-            if(CopySource->Read(Buffer, 4000)){//128
-                //std::cout<<"??????????"<<std::endl;
+            std::vector<char> AltBuffer;
+            if(DSource->Read(Buffer, 128)){//128
+                //std::cout<<"MADE into sllllecond LOOP"<<std::endl;
                 int charchecker =0;
                 for (int i = 0;i<Buffer.size();i++){
-                    //std::cout<<"BUFFER WAS: "<<Buffer[i]<<std::endl;
                     if(Buffer[i]=='<'){
                         charchecker = 0;
                     }
@@ -128,10 +124,10 @@ struct CXMLReader::SImplementation{
                     if (Buffer[i]=='&'&&charchecker==1){
                         Buffer[i]='|';
                     }
-                    //std::cout<<"BUFFER ISNOW: "<<Buffer[i]<<std::endl;
                 }
+            
                 XML_Parse(DParser,Buffer.data(),Buffer.size(),DSource->End());
-                //std::cout<<"LOOP ENDS AT PARSE"<<std::endl;/*
+                  
             }
             
             if(!DEntities.empty()){
@@ -148,12 +144,23 @@ struct CXMLReader::SImplementation{
                         return true;  
                     }  
                 }
-               
+
+                if(DEntities.back().DType != SXMLEntity::EType::EndElement){
+                   // std::cout<<"not yettttttttttttttt"<<std::endl;
+        
+                    continue;
+                }
+                while(DEntities.size()>2 && DEntities.front().DType == SXMLEntity::EType::CharData){
+                   // std::cout<<"\nfirstNAME"<<DEntities[0].DNameData<<std::endl;
+                   // std::cout<<"\nseconeNAME"<<DEntities[1].DNameData<<std::endl;
+                    DEntities[1].DNameData = DEntities[0].DNameData + DEntities[1].DNameData;
+                  //  std::cout<<"\nnewNAME"<<DEntities[1].DNameData<<std::endl;
+                    DEntities.pop_front();
+                 //   std::cout<<"\nplace in zero NAME"<<DEntities[0].DNameData<<std::endl;
+
+                }
                 entity = DEntities.front();
                 DEntities.pop_front();
-               // std::cout<<"MADE IT OUT OF SECOND LOOP"<<std::endl;
-
-
                 Done = true;
                 return true;
                 
