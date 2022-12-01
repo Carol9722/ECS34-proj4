@@ -10,7 +10,7 @@ OBJ_DIR=./obj
 CXXFLAG=-std=c++17 -I $(INC_DIR) -I /opt/local/include
 LDFLAGS=-L /opt/local/lib -lgtest -lgtest_main -lpthread -lexpat
 
-all:directories teststrutils teststrdatasource teststrdatasink testdsv testxml testcsvbs testosm testcsvbs testosm testdpr testcsvbsi testtp testtpcl
+all:directories teststrutils teststrdatasource teststrdatasink testdsv testxml testcsvbs testosm testcsvbsi testcsvbs testfiledatass testkml testdpr testtpcl testtp
 
 teststrutils: $(BIN_DIR)/teststrutils
 	$(BIN_DIR)/teststrutils
@@ -27,11 +27,14 @@ testdsv: $(BIN_DIR)/testdsv
 testxml: $(BIN_DIR)/testxml
 	$(BIN_DIR)/testxml
 
-testcsvbs: $(BIN_DIR)/testcsvbs
-	$(BIN_DIR)/testcsvbs
-
 testosm: $(BIN_DIR)/testosm
 	$(BIN_DIR)/testosm
+
+testcsvbsi: $(BIN_DIR)/testcsvbsi
+	$(BIN_DIR)/testcsvbsi
+
+testcsvbs: $(BIN_DIR)/testcsvbs
+	$(BIN_DIR)/testcsvbs
 
 testfiledatass: $(BIN_DIR)/testfiledatass
 	$(BIN_DIR)/testfiledatass
@@ -41,9 +44,6 @@ testkml: $(BIN_DIR)/testkml
 
 testdpr: $(BIN_DIR)/testdpr
 	$(BIN_DIR)/testdpr
-
-testcsvbsi: $(BIN_DIR)/testcsvbsi
-	$(BIN_DIR)/testcsvbsi
 
 testtpcl: $(BIN_DIR)/testtpcl
 	$(BIN_DIR)/testtpcl
