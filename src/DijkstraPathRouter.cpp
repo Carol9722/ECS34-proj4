@@ -1,19 +1,34 @@
 #include "DijkstraPathRouter.h"
 #include <memory>
 #include <string>
+#include <queue>
 
 struct CDijkstraPathRouter::SImplementation{
+    struct Vertex{
+        TVertexID id;
+        std::any tag;
+
+        Vertex(std::any Vtag){
+            tag = Vtag
+        }
+
+        ~Vertex(){
+
+        }
+
+    }
     
     SImplementation(){
-
+        priority_queue<Vertex> pq;
     };
 
     std::size_t VertexCount() const{
-        return 0;
+        return pq.size();
     };
 
     TVertexID AddVertex(std::any tag){
-        return 0;
+        pq.push(Vertex(tag));
+        return Vertex(tag)->ID();
     };
     
     std::any GetVertexTag(TVertexID id) const{
