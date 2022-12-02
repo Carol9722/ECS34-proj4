@@ -73,8 +73,8 @@ $(BIN_DIR)/testcsvbs: $(OBJ_DIR)/CSVBSTest.o $(OBJ_DIR)/CSVBS.o $(OBJ_DIR)/DSVRe
 $(BIN_DIR)/testosm: $(OBJ_DIR)/OSMTest.o $(OBJ_DIR)/OpenStreetMap.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringUtils.o
 	$(CXX) -o $(BIN_DIR)/testosm $(OBJ_DIR)/OSMTest.o $(OBJ_DIR)/OpenStreetMap.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringUtils.o $(LDFLAGS)
 
-$(BIN_DIR)/testkml: $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o
-	$(CXX) -o $(BIN_DIR)/testkml $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o $(LDFLAGS)
+$(BIN_DIR)/testkml: $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/XMLWriter.o $(OBJ_DIR)/StringUtils.o
+	$(CXX) -o $(BIN_DIR)/testkml $(OBJ_DIR)/KMLTest.o $(OBJ_DIR)/KMLWriter.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/XMLWriter.o $(OBJ_DIR)/StringUtils.o $(LDFLAGS)
 
 $(BIN_DIR)/testfiledatass: $(OBJ_DIR)/FileDataSSTest.o $(OBJ_DIR)/FileDataSource.o $(OBJ_DIR)/FileDataSink.o $(OBJ_DIR)/FileDataFactory.o
 	$(CXX) -o $(BIN_DIR)/testfiledatass $(OBJ_DIR)/FileDataSSTest.o $(OBJ_DIR)/FileDataSource.o $(OBJ_DIR)/FileDataSink.o $(OBJ_DIR)/FileDataFactory.o $(LDFLAGS)
@@ -85,11 +85,11 @@ $(BIN_DIR)/testdpr: $(OBJ_DIR)/DijkstraPathRouterTest.o $(OBJ_DIR)/DijkstraPathR
 $(BIN_DIR)/testcsvbsi: $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/CSVBS.o
 	$(CXX) -o $(BIN_DIR)/testcsvbsi $(OBJ_DIR)/CSVBusSystemIndexerTest.o $(OBJ_DIR)/BusSystemIndexer.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/CSVBS.o $(LDFLAGS)
 
-$(BIN_DIR)/testtpcl: $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o
-	$(CXX) -o $(BIN_DIR)/testtpcl $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o $(LDFLAGS)
+$(BIN_DIR)/testtpcl: $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSource.o
+	$(CXX) -o $(BIN_DIR)/testtpcl $(OBJ_DIR)/TPCommandLineTest.o $(OBJ_DIR)/TransportationPlannerCommandLine.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSource.o $(LDFLAGS) -lgmock
 
-$(BIN_DIR)/testtp: $(OBJ_DIR)/CSVOSMTransportationPlannerTest.o $(OBJ_DIR)/DijkstraTransportationPlanner.o
-	$(CXX) -o $(BIN_DIR)/testtp $(OBJ_DIR)/CSVOSMTransportationPlannerTest.o $(OBJ_DIR)/DijkstraTransportationPlanner.o $(LDFLAGS)
+$(BIN_DIR)/testtp: $(OBJ_DIR)/CSVOSMTransportationPlannerTest.o $(OBJ_DIR)/DijkstraTransportationPlanner.o $(OBJ_DIR)/GeographicUtils.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/CSVBS.o $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/OpenStreetMap.o
+	$(CXX) -o $(BIN_DIR)/testtp $(OBJ_DIR)/CSVOSMTransportationPlannerTest.o $(OBJ_DIR)/DijkstraTransportationPlanner.o $(OBJ_DIR)/GeographicUtils.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/XMLReader.o $(OBJ_DIR)/CSVBS.o $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/OpenStreetMap.o $(LDFLAGS)
 
 $(OBJ_DIR)/StringUtilsTest.o: $(INC_DIR)/StringUtils.h
 	$(CXX) -o $(OBJ_DIR)/StringUtilsTest.o $(CXXFLAG) -c $(TESTSRC_DIR)/StringUtilsTest.cpp
@@ -180,6 +180,10 @@ $(OBJ_DIR)/CSVOSMTransportationPlannerTest.o: $(TESTSRC_DIR)/CSVOSMTransportatio
 
 $(OBJ_DIR)/DijkstraTransportationPlanner.o: $(SRC_DIR)/DijkstraTransportationPlanner.cpp $(INC_DIR)/DijkstraTransportationPlanner.h
 	$(CXX) -o $(OBJ_DIR)/DijkstraTransportationPlanner.o $(CXXFLAG) -c $(SRC_DIR)/DijkstraTransportationPlanner.cpp
+
+$(OBJ_DIR)/GeographicUtils.o: $(SRC_DIR)/GeographicUtils.cpp $(INC_DIR)/GeographicUtils.h
+	$(CXX) -o $(OBJ_DIR)/GeographicUtils.o $(CXXFLAG) -c $(SRC_DIR)/GeographicUtils.cpp
+
 
 
 directories:
