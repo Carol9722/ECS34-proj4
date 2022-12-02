@@ -3,11 +3,6 @@
 #include<iostream>
 #include<string>
 
-TEST(DijkstraPathRouter, RouteEmptyTest){
-    CDijkstraPathRouter DijkstraPathRouter;
-    ASSERT_EQ(DijkstraPathRouter.VertexCount(), 0);
-}
-
 TEST(DijkstraPathRouter, AddVertexTest){
     CDijkstraPathRouter DijkstraPathRouter;
     int id1 = DijkstraPathRouter.AddVertex('A');
@@ -80,6 +75,99 @@ TEST(DijkstraPathRouter, VerySimpleTest){
     EXPECT_EQ(7.0,DijkstraPathRouter.FindShortestPath(Vertices[0],Vertices[4],Path));
     EXPECT_EQ(Path,ExpectedPath);
 }
+
+TEST(DijkstraPathRouter, TwoShortestPath){
+    CDijkstraPathRouter DijkstraPathRouter;
+    std::vector< CPathRouter::TVertexID > Vertices;
+    Vertices.push_back(DijkstraPathRouter.AddVertex(0));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(1));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(2));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(3));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(4));
+
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[1],4);//shorter by one. now it has same path weight as past one
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[2],1);
+    DijkstraPathRouter.AddEdge(Vertices[1],Vertices[4],3);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[3],2);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[0],6);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[1],1);
+    DijkstraPathRouter.AddEdge(Vertices[4],Vertices[3],7);
+    std::vector< CPathRouter::TVertexID > Path;
+    std::vector< CPathRouter::TVertexID > ExpectedPath = {Vertices[0],Vertices[1],Vertices[4]};
+
+
+    EXPECT_EQ(7.0,DijkstraPathRouter.FindShortestPath(Vertices[0],Vertices[4],Path));
+    EXPECT_EQ(Path,ExpectedPath);
+}
+
+TEST(DijkstraPathRouter, NegativeEdge){
+    CDijkstraPathRouter DijkstraPathRouter;
+    std::vector< CPathRouter::TVertexID > Vertices;
+    Vertices.push_back(DijkstraPathRouter.AddVertex(0));
+    Vertices.push_back(DijkstraPathRouter.AddVertex('k'));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(2));
+    Vertices.push_back(DijkstraPathRouter.AddVertex('lol'));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(8.99));
+
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[1],5);
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[2],-1);//doesnt get created. has to reroute path
+    DijkstraPathRouter.AddEdge(Vertices[1],Vertices[4],3);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[3],2);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[0],6);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[1],1);
+    DijkstraPathRouter.AddEdge(Vertices[4],Vertices[3],7);
+    std::vector< CPathRouter::TVertexID > Path;
+    std::vector< CPathRouter::TVertexID > ExpectedPath = {Vertices[0],Vertices[1],Vertices[4]};
+
+
+    EXPECT_EQ(8.0,DijkstraPathRouter.FindShortestPath(Vertices[0],Vertices[4],Path));
+    EXPECT_EQ(Path,ExpectedPath);
+}
+
+TEST(DijkstraPathRouter, BiDirisTrue){
+    CDijkstraPathRouter DijkstraPathRouter;
+    std::vector< CPathRouter::TVertexID > Vertices;
+    Vertices.push_back(DijkstraPathRouter.AddVertex(0));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(1));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(2));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(3));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(4));
+
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[1],5);
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[2],1,true);
+    DijkstraPathRouter.AddEdge(Vertices[1],Vertices[4],3,true);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[3],2);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[0],6);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[1],1);
+    DijkstraPathRouter.AddEdge(Vertices[4],Vertices[3],7);
+    std::vector< CPathRouter::TVertexID > Path;
+    std::vector< CPathRouter::TVertexID > ExpectedPath = {Vertices[0],Vertices[2],Vertices[3],Vertices[1],Vertices[4]};
+
+
+    EXPECT_EQ(7.0,DijkstraPathRouter.FindShortestPath(Vertices[0],Vertices[4],Path));
+    EXPECT_EQ(Path,ExpectedPath);
+}
+
+TEST(DijkstraPathRouter, NoPathTest){
+    CDijkstraPathRouter DijkstraPathRouter;
+    std::vector< CPathRouter::TVertexID > Vertices;
+    Vertices.push_back(DijkstraPathRouter.AddVertex(0));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(1));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(2));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(3));
+    Vertices.push_back(DijkstraPathRouter.AddVertex(4));
+
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[1],5);
+    DijkstraPathRouter.AddEdge(Vertices[0],Vertices[2],1);
+    DijkstraPathRouter.AddEdge(Vertices[2],Vertices[3],2);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[0],6);
+    DijkstraPathRouter.AddEdge(Vertices[3],Vertices[1],1);
+    std::vector< CPathRouter::TVertexID > Path;
+
+
+    EXPECT_EQ(CPathRouter::NoPathExists,DijkstraPathRouter.FindShortestPath(Vertices[0],Vertices[4],Path));
+}
+
 
 TEST(DijkstraPathRouter, SimpleTest){
     CDijkstraPathRouter DijkstraPathRouter;

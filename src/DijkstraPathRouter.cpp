@@ -77,6 +77,10 @@ struct CDijkstraPathRouter::SImplementation{
     bool AddEdge(TVertexID src, TVertexID dest, double weight, bool bidir = false) {
         if (weight > 0)
         {
+            if (bidir){
+                //std::cout<<"BIDIR IS TRUE"<<std::endl;
+                AllVertices[src]->ConnectedIDs.push_back(dest);
+            }
             AllVertices[src]->MapOfWeights.insert({dest,weight});
             AllVertices[src]->ConnectedIDs.push_back(dest);
             return true;
@@ -133,6 +137,10 @@ struct CDijkstraPathRouter::SImplementation{
         path.push_back(current);
         reverse(path.begin(),path.end());
 
+        if(DP[dest].first == std::numeric_limits<double>::infinity())
+        {
+            return NoPathExists;
+        }
         return DP[dest].first;
     };
 
